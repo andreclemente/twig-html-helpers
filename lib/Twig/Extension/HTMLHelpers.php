@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Twig\TwigFunction;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 
 class Twig_Extension_HTMLHelpers extends AbstractExtension
@@ -27,26 +29,26 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         );
 
         return array(
-            new Twig_SimpleFunction('check_box_tag', array($this, 'checkBoxTag'), $options),
-            new Twig_SimpleFunction('content_tag', array($this, 'contentTag'), $options),
-            new Twig_SimpleFunction('hidden_field_tag', array($this, 'hiddenFieldTag'), $options),
-            new Twig_SimpleFunction('html_tag', array($this, 'htmlTag'), $options),
-            new Twig_SimpleFunction('image_tag', array($this, 'imageTag'), $options),
-            new Twig_SimpleFunction('input_tag', array($this, 'inputTag'), $options),
-            new Twig_SimpleFunction('label_tag', array($this, 'labelTag'), $options),
-            new Twig_SimpleFunction('labelled_text_field_tag', array($this, 'labeledTextFieldTag'), $options),
-            new Twig_SimpleFunction('link_tag', array($this, 'linkTag'), $options),
-            new Twig_SimpleFunction('password_field_tag', array($this, 'passwordFieldTag'), $options),
-            new Twig_SimpleFunction('radio_button_tag', array($this, 'radioButtonTag'), $options),
-            new Twig_SimpleFunction('reset_tag', array($this, 'resetTag'), $options),
-            new Twig_SimpleFunction('select_tag', array($this, 'selectTag'), $options),
-            new Twig_SimpleFunction('submit_tag', array($this, 'submitTag'), $options),
-            new Twig_SimpleFunction('text_area_tag', array($this, 'textAreaTag'), $options),
-            new Twig_SimpleFunction('text_field_tag', array($this, 'textFieldTag'), $options),
+            new TwigFunction('check_box_tag', array($this, 'checkBoxTag'), $options),
+            new TwigFunction('content_tag', array($this, 'contentTag'), $options),
+            new TwigFunction('hidden_field_tag', array($this, 'hiddenFieldTag'), $options),
+            new TwigFunction('html_tag', array($this, 'htmlTag'), $options),
+            new TwigFunction('image_tag', array($this, 'imageTag'), $options),
+            new TwigFunction('input_tag', array($this, 'inputTag'), $options),
+            new TwigFunction('label_tag', array($this, 'labelTag'), $options),
+            new TwigFunction('labelled_text_field_tag', array($this, 'labeledTextFieldTag'), $options),
+            new TwigFunction('link_tag', array($this, 'linkTag'), $options),
+            new TwigFunction('password_field_tag', array($this, 'passwordFieldTag'), $options),
+            new TwigFunction('radio_button_tag', array($this, 'radioButtonTag'), $options),
+            new TwigFunction('reset_tag', array($this, 'resetTag'), $options),
+            new TwigFunction('select_tag', array($this, 'selectTag'), $options),
+            new TwigFunction('submit_tag', array($this, 'submitTag'), $options),
+            new TwigFunction('text_area_tag', array($this, 'textAreaTag'), $options),
+            new TwigFunction('text_field_tag', array($this, 'textFieldTag'), $options),
         );
     }
 
-    protected function tagOptions(Twig_Environment $env, $options)
+    protected function tagOptions(Environment $env, $options)
     {
         $html = "";
         foreach ($options as $key => $value) {
@@ -59,19 +61,19 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $html;
     }
 
-    public function htmlTag(Twig_Environment $env, $context, $name, $options=array())
+    public function htmlTag(Environment $env, $context, $name, $options=array())
     {
         return "<$name".$this->tagOptions($env, $options)." />";
     }
 
-    public function contentTag(Twig_Environment $env, $context, $name, $content='', $options=array())
+    public function contentTag(Environment $env, $context, $name, $content='', $options=array())
     {
         return "<$name".$this->tagOptions($env, $options).">".
                twig_escape_filter($env, $content).
                "</$name>";
     }
 
-    public function linkTag(Twig_Environment $env, $context, $title, $url=null, $options=array())
+    public function linkTag(Environment $env, $context, $title, $url=null, $options=array())
     {
         if (is_null($url)) {
             $url = $title;
@@ -80,13 +82,13 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->contentTag($env, $context, 'a', $title, $options);
     }
 
-    public function imageTag(Twig_Environment $env, $context, $src, $options=array())
+    public function imageTag(Environment $env, $context, $src, $options=array())
     {
         $options = array_merge(array('src' => $src), $options);
         return $this->htmlTag($env, $context, 'img', $options);
     }
 
-    public function inputTag(Twig_Environment $env, $context, $type, $name, $value=null, $options=array())
+    public function inputTag(Environment $env, $context, $type, $name, $value=null, $options=array())
     {
         $options = array_merge(
             array(
@@ -100,13 +102,13 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->htmlTag($env, $context, 'input', $options);
     }
 
-    public function textFieldTag(Twig_Environment $env, $context, $name, $default = null, $options = array())
+    public function textFieldTag(Environment $env, $context, $name, $default = null, $options = array())
     {
         $value = isset($context[$name]) ? $context[$name] : $default;
         return $this->inputTag($env, $context, 'text', $name, $value, $options);
     }
 
-    public function textAreaTag(Twig_Environment $env, $context, $name, $default = null, $options = array())
+    public function textAreaTag(Environment $env, $context, $name, $default = null, $options = array())
     {
         $content = isset($context[$name]) ? $context[$name] : $default;
         $options = array_merge(
@@ -122,19 +124,19 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
     }
 
 
-    public function hiddenFieldTag(Twig_Environment $env, $context, $name, $default = null, $options = array())
+    public function hiddenFieldTag(Environment $env, $context, $name, $default = null, $options = array())
     {
         $value = isset($context[$name]) ? $context[$name] : $default;
         return $this->inputTag($env, $context, 'hidden', $name, $value, $options);
     }
 
-    public function passwordFieldTag(Twig_Environment $env, $context, $name = 'password', $default = null, $options = array())
+    public function passwordFieldTag(Environment $env, $context, $name = 'password', $default = null, $options = array())
     {
         $value = isset($context[$name]) ? $context[$name] : $default;
         return $this->inputTag($env, $context, 'password', $name, $value, $options);
     }
 
-    public function radioButtonTag(Twig_Environment $env, $context, $name, $value, $default = false, $options = array())
+    public function radioButtonTag(Environment $env, $context, $name, $value, $default = false, $options = array())
     {
         if ((isset($context[$name]) and $context[$name] === $value) or (!isset($context[$name]) and $default))
         {
@@ -144,7 +146,7 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->inputTag($env, $context, 'radio', $name, $value, $options);
     }
 
-    public function checkBoxTag(Twig_Environment $env, $context, $name, $value = '1', $default = false, $options = array())
+    public function checkBoxTag(Environment $env, $context, $name, $value = '1', $default = false, $options = array())
     {
         if ((isset($context[$name]) and $context[$name] === $value) or (!isset($context['submit']) and $default))
         {
@@ -153,7 +155,7 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->inputTag($env, $context, 'checkbox', $name, $value, $options);
     }
 
-    public function labelTag(Twig_Environment $env, $context, $name, $text = null, $options = array())
+    public function labelTag(Environment $env, $context, $name, $text = null, $options = array())
     {
         if (is_null($text)) {
             $text = ucwords(str_replace('_', ' ', $name)).': ';
@@ -165,12 +167,12 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->contentTag($env, $context, 'label', $text, $options);
     }
 
-    public function labeledTextFieldTag(Twig_Environment $env, $context, $name, $default = null, $options = array())
+    public function labeledTextFieldTag(Environment $env, $context, $name, $default = null, $options = array())
     {
         return $this->labelTag($env, $context, $name).$this->textFieldTag($env, $context, $name, $default, $options);
     }
 
-    public function selectTag(Twig_Environment $env, $context, $name, $options, $default = null, $html_options = array())
+    public function selectTag(Environment $env, $context, $name, $options, $default = null, $html_options = array())
     {
         $opts = '';
         foreach ($options as $key => $label) {
@@ -188,7 +190,7 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return "<select".$this->tagOptions($env, $html_options).">$opts</select>";
     }
 
-    public function submitTag(Twig_Environment $env, $context, $value = 'Submit', $options = array())
+    public function submitTag(Environment $env, $context, $value = 'Submit', $options = array())
     {
         if (isset($options['name'])) {
             $name = $options['name'];
@@ -198,7 +200,7 @@ class Twig_Extension_HTMLHelpers extends AbstractExtension
         return $this->inputTag($env, $context, 'submit', $name, $value, $options);
     }
 
-    public function resetTag(Twig_Environment $env, $context, $value = 'Reset', $options = array())
+    public function resetTag(Environment $env, $context, $value = 'Reset', $options = array())
     {
         if (isset($options['name'])) {
             $name = $options['name'];

@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-class Twig_Extension_HTMLHelpers extends Twig_Extension
+use Twig\Extension\AbstractExtension;
+
+class Twig_Extension_HTMLHelpers extends AbstractExtension
 {
     public function getName()
     {
